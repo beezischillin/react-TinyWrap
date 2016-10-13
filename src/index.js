@@ -10,6 +10,13 @@ class TinyWrap extends Component {
 
     shouldComponentUpdate() {return false;}
 
+    getInstance() {
+        if (tinymce.get(this.state.editorInstance) && tinymce.get(this.state.editorInstance).initialized)
+            return tinymce.get(this.state.editorInstance);
+
+        return false;
+    }
+
     componentWillReceiveProps(props) {
         var tinywrap = this;
 
@@ -35,10 +42,12 @@ class TinyWrap extends Component {
         var tinywrap = this;
 
         tinymce.init({
-                ...this.props.config,
+            ...this.props.config,
             selector: '#' + this.state.editorInstance,
             init_instance_callback: function(ed) {
             ed.setContent((tinywrap.props.content) ? tinywrap.props.content : '');
+
+            var events = ['NodeChange', 'change', 'keyup', 'undo', 'redo', 'cut', 'copy', 'paste'];
 
             ed.on('NodeChange', function(){
                 if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
