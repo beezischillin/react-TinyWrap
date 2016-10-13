@@ -1,16 +1,16 @@
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'react', 'moment'], factory);
+        define(['exports', 'react', 'underscore', 'moment'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('react'), require('moment'));
+        factory(exports, require('react'), require('underscore'), require('moment'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.moment);
+        factory(mod.exports, global.react, global.underscore, global.moment);
         global.index = mod.exports;
     }
-})(this, function (exports, _react, _moment) {
+})(this, function (exports, _react, _underscore, _moment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,6 +18,8 @@
     });
 
     var _react2 = _interopRequireDefault(_react);
+
+    var _underscore2 = _interopRequireDefault(_underscore);
 
     var _moment2 = _interopRequireDefault(_moment);
 
@@ -52,6 +54,12 @@
             return false;
         }
 
+        getInstance() {
+            if (tinymce.get(this.state.editorInstance) && tinymce.get(this.state.editorInstance).initialized) return tinymce.get(this.state.editorInstance);
+
+            return false;
+        }
+
         componentWillReceiveProps(props) {
             var tinywrap = this;
 
@@ -78,36 +86,12 @@
                 init_instance_callback: function (ed) {
                     ed.setContent(tinywrap.props.content ? tinywrap.props.content : '');
 
-                    ed.on('NodeChange', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
+                    var events = ['NodeChange', 'change', 'keyup', 'undo', 'redo', 'cut', 'copy', 'paste'];
 
-                    ed.on('change', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('keyup', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('undo', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('redo', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('copy', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('cut', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-                    });
-
-                    ed.on('paste', function () {
-                        if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
+                    _underscore2.default.forEach(events, function (e) {
+                        ed.on(e, function () {
+                            if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function') tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
+                        });
                     });
                 } }));
         }

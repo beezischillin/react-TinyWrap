@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _                    from 'underscore';
 import moment               from 'moment';
 
 class TinyWrap extends Component {
@@ -49,44 +50,11 @@ class TinyWrap extends Component {
 
             var events = ['NodeChange', 'change', 'keyup', 'undo', 'redo', 'cut', 'copy', 'paste'];
 
-            ed.on('NodeChange', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('change', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('keyup', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('undo', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('redo', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('copy', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('cut', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
-            });
-
-            ed.on('paste', function(){
-                if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
-                    tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
+            _.forEach(events, function(e){
+                ed.on(e, function(){
+                    if (tinywrap.props.onChange && typeof tinywrap.props.onChange == 'function')
+                        tinywrap.props.onChange(tinymce.get(tinywrap.state.editorInstance).getContent());
+                });
             });
         }}
     );
