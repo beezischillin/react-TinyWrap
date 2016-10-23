@@ -1,16 +1,16 @@
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'react', 'underscore', 'moment'], factory);
+        define(['exports', 'react', 'underscore'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('react'), require('underscore'), require('moment'));
+        factory(exports, require('react'), require('underscore'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.underscore, global.moment);
+        factory(mod.exports, global.react, global.underscore);
         global.index = mod.exports;
     }
-})(this, function (exports, _react, _underscore, _moment) {
+})(this, function (exports, _react, _underscore) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -20,8 +20,6 @@
     var _react2 = _interopRequireDefault(_react);
 
     var _underscore2 = _interopRequireDefault(_underscore);
-
-    var _moment2 = _interopRequireDefault(_moment);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -47,7 +45,15 @@
         constructor(props) {
             super(props);
 
-            this.state = { editorInstance: 'tinymce_editor_' + (0, _moment2.default)().format('X') };
+            this.state = { editorInstance: 'tinymce_editor_' + this.generateUniqueID() };
+        }
+
+        generateUniqueID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : r & 0x3 | 0x8;
+                return v.toString(16);
+            });
         }
 
         shouldComponentUpdate() {
